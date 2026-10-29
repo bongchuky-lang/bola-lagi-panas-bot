@@ -1,20 +1,18 @@
 
 name: Bot Berita Bola Lagi Panas
 
-
-name: Bot Berita Bola Lagi Panas
-
 on:
   workflow_dispatch:
   schedule:
     - cron: "17 */6 * * *"
-    
+
 permissions:
   contents: write
 
 jobs:
   post-news:
     runs-on: ubuntu-latest
+
     steps:
       - name: Ambil kode bot
         uses: actions/checkout@v4
@@ -24,20 +22,18 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Instal kebutuhan
-        run: pip install -r requirements.txt
+      - name: Install dependensi
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Jalankan bot
-        env:
-          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
-          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
-          FB_GRAPH_VERSION: ${{ secrets.FB_GRAPH_VERSION }}
+      - name: Jalankan bot berita
         run: python bot.py
 
-      - name: Simpan riwayat berita
+      - name: Simpan daftar berita yang sudah diposting
         run: |
-          git config user.name "Bola Lagi Panas Bot"
-          git config user.email "bot@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add posted.json
-          git diff --cached --quiet || git commit -m "Simpan riwayat berita"
+          git diff --cached --quiet || git commit -m "Update daftar berita yang sudah diposting"
           git push
