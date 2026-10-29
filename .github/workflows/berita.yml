@@ -2,9 +2,10 @@
 name: Bot Berita Bola Lagi Panas
 
 on:
+  on:
   workflow_dispatch:
   schedule:
-    - cron: "15 1 * * *"
+    - cron: "17 */6 * * *"
 
 permissions:
   contents: write
